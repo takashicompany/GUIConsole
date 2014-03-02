@@ -1,4 +1,5 @@
-﻿// takashicompany.com
+﻿// var 1.0.0
+// takashicompany.com
 
 using UnityEngine;
 
