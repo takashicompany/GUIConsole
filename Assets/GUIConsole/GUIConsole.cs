@@ -148,16 +148,6 @@ public class GUIConsole : MonoBehaviour {
 		Application.RegisterLogCallback(null);
 	}
 
-	public void Open ()
-	{
-		_show = true;
-	}
-
-	public void Close ()
-	{
-
-	}
-
 	void ScrollList(Vector2 touchPosition, Vector2 offset)
 	{
 
