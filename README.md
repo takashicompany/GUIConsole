@@ -1,15 +1,15 @@
 GUIConsole
 ==========
 
-UnityのコンソールのログをGameView内に表示するGUIウィンドウです。
+UnityのコンソールログをGameView内に表示するGUIウィンドウ。
+ログ・エラーの内容と発生箇所が表示される。
+簡易なログのエクスポート機能付き。
 
 ## 使い方
 1. Scene内のGameObjectにGUIConsoleクラスをアタッチする。
 1. ランタイム時に、GUIConsoleインスタンスのShow関数をコールするとGameViewにコンソールウィンドウが表示される。
 
-## できること
-* GameViewでログ・エラーの表示(ログ・エラーの発生箇所（ファイル名や関数名も表示可能)
-* ログのエクスポート
+Assets/GUIConsole/Sample/Scenes/GUIConsoleSampleScene.unityにサンプルがある。
 
 ## クラス
 ### GUIConsole.cs
