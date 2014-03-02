@@ -36,13 +36,9 @@ public class GUIConsole : MonoBehaviour {
 	}
 
 	[SerializeField]
-	private Rect _guiButtonRect = new Rect(0,0,100,100);
-
-	[SerializeField]
-	private Vector2 _windowCenterPos = new Vector2(300,200);
-
-	[SerializeField]
 	private Vector2 _consoleSize = new Vector2(600,400);
+	
+	private Vector2 _windowCenterPos = new Vector2(300,200);
 
 	private Rect _consoleRect
 	{
@@ -79,7 +75,7 @@ public class GUIConsole : MonoBehaviour {
 	[SerializeField]
 	private int _maxLogCount = 1000;
 
-	public bool _show;
+	public bool isShow;
 
 	private Vector2 _listScrollPosition;
 	private Vector2 _detailScrollPosition;
@@ -101,6 +97,7 @@ public class GUIConsole : MonoBehaviour {
 	void Awake ()
 	{
 		_logQueue = new Queue<LogData>();
+		_windowCenterPos = new Vector2(Screen.width / 2,Screen.height / 2);
 	}
 
 	void Update ()
@@ -147,7 +144,7 @@ public class GUIConsole : MonoBehaviour {
 	{
 		Application.RegisterLogCallback(null);
 	}
-
+	
 	void ScrollList(Vector2 touchPosition, Vector2 offset)
 	{
 
@@ -189,14 +186,6 @@ public class GUIConsole : MonoBehaviour {
 		stackTrace = "";
 		System.Diagnostics.StackTrace systemStackTrace = new System.Diagnostics.StackTrace(true);
 		stackTrace = systemStackTrace.ToString();
-//
-//		// i = 4 : 0 ~ 3 Logs are created by this class.
-//		for(int i = 4;i < systemStackTrace.GetFrames().Length; i++)
-//		{
-//			System.Diagnostics.StackFrame frame =  systemStackTrace.GetFrames()[i];
-//			stackTrace += frame.ToString() + "\n\n";
-//		}
-
 		AddLog(new LogData(condition, stackTrace, type));
 	}
 
@@ -211,14 +200,9 @@ public class GUIConsole : MonoBehaviour {
 
 	void OnGUI ()
 	{
-		if(_show)
+		if(isShow)
 		{
 			_consoleRect = GUILayout.Window(19890611, _consoleRect,DrawConsoleWindow,"Console (Move by dragging here.)",GUILayout.MaxWidth(_consoleRect.width));
-		}
-
-		if (GUI.Button(_guiButtonRect,_show ? "Close" : "Open Console"))
-		{
-			_show = !_show;
 		}
 	}
 
@@ -322,9 +306,12 @@ public class GUIConsole : MonoBehaviour {
 		{
 			if (GUILayout.Button("Log Export"))
 			{
+
+				ExportLog(_selectedLogData);
+
 				// Instead of the Clipboard
-				string str = WWW.EscapeURL(_selectedLogData.ToString());
-				Application.OpenURL("mailto:?subject=&body=" + str);
+				//string str = WWW.EscapeURL(_selectedLogData.ToString());
+				//Application.OpenURL("mailto:?subject=&body=" + str);
 			}
 		}
 
@@ -342,7 +329,7 @@ public class GUIConsole : MonoBehaviour {
 
 		if(GUILayout.Button("Close"))
 		{
-			_show = false;
+			isShow = false;
 		}
 		GUILayout.EndHorizontal();
 
@@ -351,7 +338,21 @@ public class GUIConsole : MonoBehaviour {
 
 		GUI.contentColor = defaultContentColor;
 	}
+
+	private void ExportLog (LogData log)
+	{
+		TextEditor te = new TextEditor();
+
+		te.content = new GUIContent(log.ToString());
+
+		te.SelectAll();
+
+		te.Copy();
+	}
+
 }
+
+
 
 
 
