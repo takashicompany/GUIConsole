@@ -36,7 +36,7 @@ public class GUIConsole : MonoBehaviour {
 	}
 
 	[SerializeField]
-	private Vector2 _consoleSize = new Vector2(600,400);
+	private Vector2 _consoleSize = new Vector2(400,300);
 	
 	private Vector2 _windowCenterPos = new Vector2(300,200);
 
@@ -75,7 +75,7 @@ public class GUIConsole : MonoBehaviour {
 	[SerializeField]
 	private int _maxLogCount = 1000;
 
-	public bool isShow;
+	public bool isShow{get; private set;}
 
 	private Vector2 _listScrollPosition;
 	private Vector2 _detailScrollPosition;
@@ -144,7 +144,18 @@ public class GUIConsole : MonoBehaviour {
 	{
 		Application.RegisterLogCallback(null);
 	}
-	
+
+	public void Show ()
+	{
+		_autoListScroll = true;
+		isShow = true;
+	}
+
+	public void Hide ()
+	{
+		isShow = false;
+	}
+
 	void ScrollList(Vector2 touchPosition, Vector2 offset)
 	{
 
@@ -221,13 +232,6 @@ public class GUIConsole : MonoBehaviour {
 
 		GUILayout.BeginHorizontal();
 		GUILayout.Label("Logs");
-
-		// Auto Scroll Button
-//		if(GUILayout.Button(_autoListScroll ? "Auto Scroll" : "Manual Scroll"))
-//		{
-//			_autoListScroll = !_autoListScroll;
-//		}
-
 
 		GUILayout.Space(20);
 
@@ -306,12 +310,7 @@ public class GUIConsole : MonoBehaviour {
 		{
 			if (GUILayout.Button("Log Export"))
 			{
-
 				ExportLog(_selectedLogData);
-
-				// Instead of the Clipboard
-				//string str = WWW.EscapeURL(_selectedLogData.ToString());
-				//Application.OpenURL("mailto:?subject=&body=" + str);
 			}
 		}
 
@@ -341,19 +340,21 @@ public class GUIConsole : MonoBehaviour {
 
 	private void ExportLog (LogData log)
 	{
-		TextEditor te = new TextEditor();
-
-		te.content = new GUIContent(log.ToString());
-
-		te.SelectAll();
-
-		te.Copy();
+		if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+		{
+			//Instead of the Clipboard
+			string str = WWW.EscapeURL(_selectedLogData.ToString());
+			Application.OpenURL("mailto:?subject=&body=" + str);
+		}
+		else
+		{
+			TextEditor te = new TextEditor();
+			te.content = new GUIContent(log.ToString());
+			te.SelectAll();
+			te.Copy();
+		}
 	}
-
 }
-
-
-
 
 
 internal static class LogTypeExtension

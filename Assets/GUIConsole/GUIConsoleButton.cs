@@ -7,6 +7,7 @@ public class GUIConsoleButton : MonoBehaviour {
 
 	public GUIConsole console;
 
+	[SerializeField]
 	private Rect _buttonRect = new Rect(0f,0f,100f,100f);
 
 	void Awake ()
@@ -24,7 +25,14 @@ public class GUIConsoleButton : MonoBehaviour {
 			string label = string.Format("Console:{0}",console.isShow);
 			if (GUI.Button(_buttonRect,label))
 			{
-				console.isShow = !console.isShow;
+				if(console.isShow)
+				{
+					console.Hide();
+				}
+				else
+				{
+					console.Show();
+				}
 			}
 
 		}
